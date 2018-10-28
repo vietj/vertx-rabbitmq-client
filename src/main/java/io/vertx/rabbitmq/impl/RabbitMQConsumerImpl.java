@@ -32,7 +32,9 @@ public class RabbitMQConsumerImpl implements RabbitMQConsumer {
     this.consumerHandler = consumerHandler;
     this.keepMostRecent = options.isKeepMostRecent();
     this.maxQueueSize = options.maxInternalQueueSize();
-    this.pending = new InboundBuffer<>(vertx.getOrCreateContext(), maxQueueSize);
+    this.pending = new InboundBuffer<RabbitMQMessage>(vertx.getOrCreateContext(), maxQueueSize).handler(msg -> {
+      System.out.println("LOST MESSAGE");
+    });
 
     pending.resume();
   }
